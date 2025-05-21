@@ -217,13 +217,7 @@
     let moveHistory = { X: [], O: [] };
     let gameMode = 'single'; // 'single' 或 'multi'
     let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
-    let backgroundMusic = new Audio('https://www.bensound.com/bensound-music/bensound-happyrock.mp3');
     let victorySound = new Audio('https://www.myinstants.com/media/sounds/mario-coin.mp3');
-
-    // 啟動背景音樂
-    backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.3;
-    backgroundMusic.play().catch(error => console.log('背景音樂播放失敗:', error));
 
     function showModeSelect() {
       menu.style.display = 'none';
@@ -235,6 +229,8 @@
       modeSelect.style.display = 'none';
       gameContainer.style.display = 'flex';
       roomInput.style.display = 'none';
+      initializeGame();
+      setupSinglePlayer();
       playSound();
     }
 
@@ -244,57 +240,33 @@
       gameContainer.style.display = 'flex';
       roomInput.style.display = 'inline-block';
       status.textContent = '輸入房間號並等待對手';
-      // 這裡應加入多人邏輯（需後端支持），暫時模擬雙人
+      initializeGame();
       setupMultiplayer();
     }
 
-    function setupMultiplayer() {
-      // 模擬雙人模式，實際需後端（如 Socket.IO）
+    function initializeGame() {
+      board = Array(9).fill(null);
+      moveHistory = { X: [], O: [] };
       currentPlayer = 'X';
-      status.textContent = `輪到你 (X)`;
+      status.textContent = gameMode === 'single' ? `輪到你 (X)` : `輪到你 (X)`;
       boxes.forEach(box => {
-        box.addEventListener('click', handleMultiplayerMove);
+        box.textContent = '';
+        box.disabled = false;
       });
     }
 
-    function handleMultiplayerMove() {
-      if (currentPlayer !== 'X' || board[parseInt(this.getAttribute('data-index'))] || checkWinner()) return;
-
-      const index = parseInt(this.getAttribute('data-index'));
-      placeMove(index, 'X');
-      if (checkWinner()) {
-        status.textContent = `你 (X) 勝利！`;
-        disableBoard();
-        playVictorySound();
-        return;
-      }
-
-      currentPlayer = 'O';
-      status.textContent = `輪到對手 (O)`;
-      // 模擬對手隨機下棋（實際需後端傳輸）
-      setTimeout(() => {
-        let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
-        if (emptyCells.length > 0) {
-          const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-          placeMove(randomIndex, 'O');
-          if (checkWinner()) {
-            status.textContent = `對手 (O) 勝利！`;
-            disableBoard();
-            playVictorySound();
-            return;
-          }
-          currentPlayer = 'X';
-          status.textContent = `輪到你 (X)`;
-        }
-      }, 500);
+    function setupSinglePlayer() {
+      boxes.forEach(box => {
+        box.removeEventListener('click', handleMultiplayerMove);
+        box.addEventListener('click', handleSinglePlayerMove);
+      });
     }
 
-    function startGame() {
-      if (gameMode === 'single') {
-        startSinglePlayer();
-      } else {
-        startMultiplayer();
-      }
+    function setupMultiplayer() {
+      boxes.forEach(box => {
+        box.removeEventListener('click', handleSinglePlayerMove);
+        box.addEventListener('click', handleMultiplayerMove);
+      });
     }
 
     function showSettings() {
@@ -324,7 +296,6 @@
     function playSound() {
       const volume = document.getElementById('volume')?.value || 1;
       clickSound.volume = volume;
-      backgroundMusic.volume = volume * 0.3;
       clickSound.play();
     }
 
@@ -347,28 +318,18 @@
     }
 
     function resetGame() {
-      board = Array(9).fill(null);
-      moveHistory = { X: [], O: [] };
-      currentPlayer = 'X';
-      status.textContent = gameMode === 'single' ? `輪到你 (X)` : `輪到你 (X)`;
-      boxes.forEach(box => {
-        box.textContent = '';
-        box.disabled = false;
-      });
+      initializeGame();
       if (gameMode === 'single') {
-        boxes.forEach(box => box.removeEventListener('click', handleMultiplayerMove));
-        boxes.forEach(box => box.addEventListener('click', handleSinglePlayerMove));
+        setupSinglePlayer();
       } else {
-        boxes.forEach(box => box.removeEventListener('click', handleSinglePlayerMove));
-        boxes.forEach(box => box.addEventListener('click', handleMultiplayerMove));
+        setupMultiplayer();
       }
-      playSound();
     }
 
     function handleSinglePlayerMove() {
-      if (currentPlayer !== 'X' || board[parseInt(this.getAttribute('data-index'))] || checkWinner()) return;
-
       const index = parseInt(this.getAttribute('data-index'));
+      if (board[index] || checkWinner()) return;
+
       placeMove(index, 'X');
       if (checkWinner()) {
         status.textContent = `你 (X) 勝利！`;
@@ -380,6 +341,37 @@
       currentPlayer = 'O';
       status.textContent = `輪到 AI (O)`;
       setTimeout(aiMove, 500);
+    }
+
+    function handleMultiplayerMove() {
+      const index = parseInt(this.getAttribute('data-index'));
+      if (currentPlayer !== 'X' || board[index] || checkWinner()) return;
+
+      placeMove(index, 'X');
+      if (checkWinner()) {
+        status.textContent = `你 (X) 勝利！`;
+        disableBoard();
+        playVictorySound();
+        return;
+      }
+
+      currentPlayer = 'O';
+      status.textContent = `輪到對手 (O)`;
+      setTimeout(() => {
+        let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
+        if (emptyCells.length > 0) {
+          const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          placeMove(randomIndex, 'O');
+          if (checkWinner()) {
+            status.textContent = `對手 (O) 勝利！`;
+            disableBoard();
+            playVictorySound();
+            return;
+          }
+          currentPlayer = 'X';
+          status.textContent = `輪到你 (X)`;
+        }
+      }, 500);
     }
 
     function aiMove() {
