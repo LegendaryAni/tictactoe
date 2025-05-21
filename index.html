@@ -12,17 +12,89 @@
     }
     body {
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .menu, .mode-select {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
+      text-align: center;
     }
-    .container {
-      display: flex;
+    .menu h1, .mode-select h2 {
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .menu h1 {
+      font-size: 48px;
+    }
+    .mode-select h2 {
+      font-size: 36px;
+    }
+    .menu button, .mode-select button {
+      width: 200px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 20px;
+      background: #1e90ff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .menu button:hover, .mode-select button:hover {
+      background: #00bfff;
+    }
+    .settings, .sound, .rules {
+      display: none;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .settings p, .sound p, .rules p {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .rules ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .rules li {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+    .settings select, .sound input {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: none;
+    }
+    .back-button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #191913;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .back-button:hover {
+      background: #333;
+    }
+    .game-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
     .game {
       display: grid;
@@ -63,12 +135,58 @@
       font-size: 24px;
       color: #fff;
     }
+    #roomInput {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <p id="status">輪到 X</p>
-    <div class="game">
+  <div class="menu" id="menu">
+    <h1>圈圈叉叉</h1>
+    <button onclick="showModeSelect()">PLAY GAME</button>
+    <button onclick="showSettings()">SETTINGS</button>
+    <button onclick="showSound()">SOUND</button>
+    <button onclick="showRules()">RULE</button>
+  </div>
+  <div class="mode-select" id="modeSelect" style="display: none;">
+    <h2>選擇模式</h2>
+    <button onclick="startSinglePlayer()">單人模式 (AI)</button>
+    <button onclick="startMultiplayer()">雙人模式 (真人)</button>
+    <button class="back-button" onclick="backToMenu()">返回</button>
+  </div>
+  <div class="settings" id="settings">
+    <p>遊戲設置</p>
+    <select id="difficulty">
+      <option value="easy">簡單</option>
+      <option value="normal">普通</option>
+      <option value="hard">困難</option>
+    </select>
+    <button class="back-button" onclick="backToMenu()">返回</button>
+  </div>
+  <div class="sound" id="sound">
+    <p>音效控制</p>
+    <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+    <button class="back-button" onclick="backToMenu()">返回</button>
+  </div>
+  <div class="rules" id="rules">
+    <p>遊戲規則</p>
+    <ul>
+      <li>單人模式：你 (X) 對戰 AI (O)。</li>
+      <li>雙人模式：與朋友 (O) 輪流對戰。</li>
+      <li>每種符號最多 3 個，第四個放進去時，第一個會消失！</li>
+      <li>連成一條線（橫、縱或對角線）就勝利！</li>
+      <li>點「重新開始」可以重玩。</li>
+      <li>用 Chrome 或 Firefox 玩，如果看不到畫面，清空快取試試！</li>
+    </ul>
+    <button class="back-button" onclick="backToMenu()">返回</button>
+  </div>
+  <div class="game-container" id="gameContainer">
+    <p id="status">輪到你 (X)</p>
+    <div class="game" id="gameBoard">
       <button class="box" data-index="0"></button>
       <button class="box" data-index="1"></button>
       <button class="box" data-index="2"></button>
@@ -79,53 +197,214 @@
       <button class="box" data-index="7"></button>
       <button class="box" data-index="8"></button>
     </div>
-    <button id="reset">重新開始</button>
+    <input type="text" id="roomInput" placeholder="輸入房間號 (雙人模式)" style="display: none;">
+    <button id="reset" onclick="resetGame()">重新開始</button>
   </div>
 
   <script>
+    const menu = document.getElementById('menu');
+    const modeSelect = document.getElementById('modeSelect');
+    const settings = document.getElementById('settings');
+    const sound = document.getElementById('sound');
+    const rules = document.getElementById('rules');
+    const gameContainer = document.getElementById('gameContainer');
     const boxes = document.querySelectorAll('.box');
     const resetButton = document.getElementById('reset');
     const status = document.getElementById('status');
+    const roomInput = document.getElementById('roomInput');
     let board = Array(9).fill(null);
     let currentPlayer = 'X';
     let moveHistory = { X: [], O: [] };
+    let gameMode = 'single'; // 'single' 或 'multi'
+    let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
+    let backgroundMusic = new Audio('https://www.bensound.com/bensound-music/bensound-happyrock.mp3');
+    let victorySound = new Audio('https://www.myinstants.com/media/sounds/mario-coin.mp3');
 
-    boxes.forEach(box => {
-      box.addEventListener('click', () => {
-        const index = parseInt(box.getAttribute('data-index'));
-        if (board[index] || checkWinner()) return;
+    // 啟動背景音樂
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.3;
+    backgroundMusic.play().catch(error => console.log('背景音樂播放失敗:', error));
 
-        board[index] = currentPlayer;
-        box.textContent = currentPlayer;
+    function showModeSelect() {
+      menu.style.display = 'none';
+      modeSelect.style.display = 'flex';
+    }
 
-        moveHistory[currentPlayer].push(index);
-        if (moveHistory[currentPlayer].length > 3) {
-          const oldIndex = moveHistory[currentPlayer].shift();
-          board[oldIndex] = null;
-          boxes[oldIndex].textContent = '';
-        }
+    function startSinglePlayer() {
+      gameMode = 'single';
+      modeSelect.style.display = 'none';
+      gameContainer.style.display = 'flex';
+      roomInput.style.display = 'none';
+      playSound();
+    }
 
-        if (checkWinner()) {
-          status.textContent = `玩家 ${currentPlayer} 勝利！`;
-          disableBoard();
-          return;
-        }
+    function startMultiplayer() {
+      gameMode = 'multi';
+      modeSelect.style.display = 'none';
+      gameContainer.style.display = 'flex';
+      roomInput.style.display = 'inline-block';
+      status.textContent = '輸入房間號並等待對手';
+      // 這裡應加入多人邏輯（需後端支持），暫時模擬雙人
+      setupMultiplayer();
+    }
 
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        status.textContent = `輪到 ${currentPlayer}`;
+    function setupMultiplayer() {
+      // 模擬雙人模式，實際需後端（如 Socket.IO）
+      currentPlayer = 'X';
+      status.textContent = `輪到你 (X)`;
+      boxes.forEach(box => {
+        box.addEventListener('click', handleMultiplayerMove);
       });
-    });
+    }
 
-    resetButton.addEventListener('click', () => {
+    function handleMultiplayerMove() {
+      if (currentPlayer !== 'X' || board[parseInt(this.getAttribute('data-index'))] || checkWinner()) return;
+
+      const index = parseInt(this.getAttribute('data-index'));
+      placeMove(index, 'X');
+      if (checkWinner()) {
+        status.textContent = `你 (X) 勝利！`;
+        disableBoard();
+        playVictorySound();
+        return;
+      }
+
+      currentPlayer = 'O';
+      status.textContent = `輪到對手 (O)`;
+      // 模擬對手隨機下棋（實際需後端傳輸）
+      setTimeout(() => {
+        let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
+        if (emptyCells.length > 0) {
+          const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          placeMove(randomIndex, 'O');
+          if (checkWinner()) {
+            status.textContent = `對手 (O) 勝利！`;
+            disableBoard();
+            playVictorySound();
+            return;
+          }
+          currentPlayer = 'X';
+          status.textContent = `輪到你 (X)`;
+        }
+      }, 500);
+    }
+
+    function startGame() {
+      if (gameMode === 'single') {
+        startSinglePlayer();
+      } else {
+        startMultiplayer();
+      }
+    }
+
+    function showSettings() {
+      menu.style.display = 'none';
+      settings.style.display = 'flex';
+    }
+
+    function showSound() {
+      menu.style.display = 'none';
+      sound.style.display = 'flex';
+    }
+
+    function showRules() {
+      menu.style.display = 'none';
+      rules.style.display = 'flex';
+    }
+
+    function backToMenu() {
+      menu.style.display = 'flex';
+      modeSelect.style.display = 'none';
+      settings.style.display = 'none';
+      sound.style.display = 'none';
+      rules.style.display = 'none';
+      gameContainer.style.display = 'none';
+    }
+
+    function playSound() {
+      const volume = document.getElementById('volume')?.value || 1;
+      clickSound.volume = volume;
+      backgroundMusic.volume = volume * 0.3;
+      clickSound.play();
+    }
+
+    function playVictorySound() {
+      const volume = document.getElementById('volume')?.value || 1;
+      victorySound.volume = volume;
+      victorySound.play();
+    }
+
+    function placeMove(index, player) {
+      board[index] = player;
+      boxes[index].textContent = player;
+      moveHistory[player].push(index);
+      if (moveHistory[player].length > 3) {
+        const oldIndex = moveHistory[player].shift();
+        board[oldIndex] = null;
+        boxes[oldIndex].textContent = '';
+      }
+      playSound();
+    }
+
+    function resetGame() {
       board = Array(9).fill(null);
       moveHistory = { X: [], O: [] };
       currentPlayer = 'X';
-      status.textContent = `輪到 ${currentPlayer}`;
+      status.textContent = gameMode === 'single' ? `輪到你 (X)` : `輪到你 (X)`;
       boxes.forEach(box => {
         box.textContent = '';
         box.disabled = false;
       });
-    });
+      if (gameMode === 'single') {
+        boxes.forEach(box => box.removeEventListener('click', handleMultiplayerMove));
+        boxes.forEach(box => box.addEventListener('click', handleSinglePlayerMove));
+      } else {
+        boxes.forEach(box => box.removeEventListener('click', handleSinglePlayerMove));
+        boxes.forEach(box => box.addEventListener('click', handleMultiplayerMove));
+      }
+      playSound();
+    }
+
+    function handleSinglePlayerMove() {
+      if (currentPlayer !== 'X' || board[parseInt(this.getAttribute('data-index'))] || checkWinner()) return;
+
+      const index = parseInt(this.getAttribute('data-index'));
+      placeMove(index, 'X');
+      if (checkWinner()) {
+        status.textContent = `你 (X) 勝利！`;
+        disableBoard();
+        playVictorySound();
+        return;
+      }
+
+      currentPlayer = 'O';
+      status.textContent = `輪到 AI (O)`;
+      setTimeout(aiMove, 500);
+    }
+
+    function aiMove() {
+      if (checkWinner()) {
+        status.textContent = `AI (O) 勝利！`;
+        disableBoard();
+        playVictorySound();
+        return;
+      }
+
+      let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
+      if (emptyCells.length > 0) {
+        const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        placeMove(randomIndex, 'O');
+        if (checkWinner()) {
+          status.textContent = `AI (O) 勝利！`;
+          disableBoard();
+          playVictorySound();
+          return;
+        }
+      }
+
+      currentPlayer = 'X';
+      status.textContent = `輪到你 (X)`;
+    }
 
     function checkWinner() {
       const winConditions = [
