@@ -29,7 +29,7 @@
     body.cyberpunk {
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     }
-    .menu, .mode-select, .tutorial {
+    .menu, .mode-select, .tutorial, .difficulty, .sound, .rules {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -37,30 +37,30 @@
       height: 100vh;
       text-align: center;
     }
-    .menu h1, .mode-select h2, .tutorial h2 {
+    .menu h1, .mode-select h2, .tutorial h2, .difficulty h2, .sound h2, .rules h2 {
       color: #fff;
       margin-bottom: 20px;
       text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
-    .retro-pixel .menu h1, .retro-pixel .mode-select h2, .retro-pixel .tutorial h2 {
+    .retro-pixel .menu h1, .retro-pixel .mode-select h2, .retro-pixel .tutorial h2, .retro-pixel .difficulty h2, .retro-pixel .sound h2, .retro-pixel .rules h2 {
       color: #ff0;
       text-shadow: 2px 2px #f00;
     }
-    .futuristic .menu h1, .futuristic .mode-select h2, .futuristic .tutorial h2 {
+    .futuristic .menu h1, .futuristic .mode-select h2, .futuristic .tutorial h2, .futuristic .difficulty h2, .futuristic .sound h2, .futuristic .rules h2 {
       color: #00d4ff;
       text-shadow: 0 0 5px #00d4ff;
     }
-    .cyberpunk .menu h1, .cyberpunk .mode-select h2, .cyberpunk .tutorial h2 {
+    .cyberpunk .menu h1, .cyberpunk .mode-select h2, .cyberpunk .tutorial h2, .cyberpunk .difficulty h2, .cyberpunk .sound h2, .cyberpunk .rules h2 {
       color: #00ffea;
       text-shadow: 0 0 5px #ff007a;
     }
     .menu h1 {
       font-size: 48px;
     }
-    .mode-select h2, .tutorial h2 {
+    .mode-select h2, .tutorial h2, .difficulty h2, .sound h2, .rules h2 {
       font-size: 36px;
     }
-    .menu button, .mode-select button, .tutorial button {
+    .menu button, .mode-select button, .tutorial button, .difficulty button, .sound button, .rules button {
       width: 200px;
       padding: 15px;
       margin: 10px 0;
@@ -72,15 +72,15 @@
       cursor: pointer;
       transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     }
-    .menu button:hover, .mode-select button:hover, .tutorial button:hover {
+    .menu button:hover, .mode-select button:hover, .tutorial button:hover, .difficulty button:hover, .sound button:hover, .rules button:hover {
       background: #00bfff;
       transform: scale(1.05);
       box-shadow: 0 0 10px #00bfff;
     }
-    .menu button:focus, .mode-select button:focus, .tutorial button:focus {
+    .menu button:focus, .mode-select button:focus, .tutorial button:focus, .difficulty button:focus, .sound button:focus, .rules button:focus {
       outline: 3px solid #00bfff;
     }
-    .retro-pixel .menu button, .retro-pixel .mode-select button, .retro-pixel .tutorial button {
+    .retro-pixel .menu button, .retro-pixel .mode-select button, .retro-pixel .tutorial button, .retro-pixel .difficulty button, .retro-pixel .sound button, .retro-pixel .rules button {
       background: #f00;
       color: #ff0;
       border: 2px solid #ff0;
@@ -88,44 +88,138 @@
       font-family: 'Press Start 2P', monospace;
       box-shadow: 4px 4px #000;
     }
-    .retro-pixel .menu button:hover, .retro-pixel .mode-select button:hover, .retro-pixel .tutorial button:hover {
+    .retro-pixel .menu button:hover, .retro-pixel .mode-select button:hover, .retro-pixel .tutorial button:hover, .retro-pixel .difficulty button:hover, .retro-pixel .sound button:hover, .retro-pixel .rules button:hover {
       background: #ff0;
       color: #f00;
       box-shadow: 4px 4px #000;
     }
-    .futuristic .menu button, .futuristic .mode-select button, .futuristic .tutorial button {
+    .futuristic .menu button, .futuristic .mode-select button, .futuristic .tutorial button, .futuristic .difficulty button, .futuristic .sound button, .futuristic .rules button {
       background: transparent;
       color: #00d4ff;
       border: 2px solid #00d4ff;
       box-shadow: 0 0 10px #00d4ff;
     }
-    .futuristic .menu button:hover, .futuristic .mode-select button:hover, .futuristic .tutorial button:hover {
+    .futuristic .menu button:hover, .futuristic .mode-select button:hover, .futuristic .tutorial button:hover, .futuristic .difficulty button:hover, .futuristic .sound button:hover, .futuristic .rules button:hover {
       background: #00d4ff;
       color: #1a1a3d;
       box-shadow: 0 0 15px #00d4ff;
     }
-    .cyberpunk .menu button, .cyberpunk .mode-select button, .cyberpunk .tutorial button {
+    .cyberpunk .menu button, .cyberpunk .mode-select button, .cyberpunk .tutorial button, .cyberpunk .difficulty button, .cyberpunk .sound button, .cyberpunk .rules button {
       background: #ff007a;
       border: 2px solid #00ffea;
       box-shadow: 0 0 10px #ff007a;
       text-shadow: 0 0 5px #ff007a;
     }
-    .cyberpunk .menu button:hover, .cyberpunk .mode-select button:hover, .cyberpunk .tutorial button:hover {
+    .cyberpunk .menu button:hover, .cyberpunk .mode-select button:hover, .cyberpunk .tutorial button:hover, .cyberpunk .difficulty button:hover, .cyberpunk .sound button:hover, .cyberpunk .rules button:hover {
       background: #00ffea;
       box-shadow: 0 0 15px #00ffea;
     }
-    .settings, .sound, .rules {
-      display: none;
-      flex-direction: column;
+    .sound .volume-container {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: #fff;
-    }
-    .settings p, .sound p, .rules p {
-      font-size: 24px;
       margin-bottom: 20px;
-      text-align: center;
+    }
+    .sound .volume-bar {
+      width: 200px;
+      height: 10px;
+      background: #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-left: 10px;
+    }
+    .sound .volume-level {
+      height: 100%;
+      background: #1e90ff;
+      transition: width 0.3s;
+    }
+    .retro-pixel .sound .volume-level {
+      background: #f00;
+    }
+    .futuristic .sound .volume-level {
+      background: #00d4ff;
+    }
+    .cyberpunk .sound .volume-level {
+      background: #ff007a;
+    }
+    .sound #volume {
+      width: 200px;
+      padding: 10px;
+      appearance: none;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+    }
+    .sound #volume::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .retro-pixel .sound #volume::-webkit-slider-thumb {
+      background: #ff0;
+      border: 2px solid #f00;
+    }
+    .futuristic .sound #volume::-webkit-slider-thumb {
+      background: #00d4ff;
+      border: 2px solid #1a1a3d;
+    }
+    .cyberpunk .sound #volume::-webkit-slider-thumb {
+      background: #00ffea;
+      border: 2px solid #ff007a;
+    }
+    .sound #soundToggle {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #fff;
+      color: #333;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .sound #soundToggle:hover {
+      background: #ddd;
+      box-shadow: 0 0 10px #ddd;
+    }
+    .sound #soundToggle:focus {
+      outline: 3px solid #ddd;
+    }
+    .retro-pixel .sound #soundToggle {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 4px 4px #000;
+    }
+    .retro-pixel .sound #soundToggle:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic .sound #soundToggle {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 10px #00d4ff;
+    }
+    .futuristic .sound #soundToggle:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 15px #00d4ff;
+    }
+    .cyberpunk .sound #soundToggle {
+      background: #ff007a;
+      color: #00ffea;
+      border: 2px solid #00ffea;
+      box-shadow: 0 0 10px #ff007a;
+    }
+    .cyberpunk .sound #soundToggle:hover {
+      background: #00ffea;
+      color: #ff007a;
+      box-shadow: 0 0 15px #00ffea;
     }
     .rules ul, .tutorial ul {
       list-style-type: none;
@@ -134,31 +228,6 @@
     .rules li, .tutorial li {
       font-size: 20px;
       margin: 10px 0;
-    }
-    .settings select, .sound input {
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 20px;
-      border-radius: 5px;
-      border: none;
-      background: #fff;
-      color: #333;
-    }
-    .retro-pixel .settings select, .retro-pixel .sound input {
-      background: #ff0;
-      color: #f00;
-      border: 2px solid #f00;
-      border-radius: 0;
-    }
-    .futuristic .settings select, .futuristic .sound input {
-      background: transparent;
-      color: #00d4ff;
-      border: 2px solid #00d4ff;
-    }
-    .cyberpunk .settings select, .cyberpunk .sound input {
-      background: #1a1a3d;
-      color: #00ffea;
-      border: 1px solid #ff007a;
     }
     .back-button {
       padding: 10px 20px;
@@ -573,11 +642,11 @@
 <body>
   <div class="menu" id="menu">
     <h1>圈圈叉叉</h1>
-    <button onclick="showModeSelect()">PLAY GAME</button>
-    <button onclick="showSettings()">SETTINGS</button>
-    <button onclick="showSound()">SOUND</button>
-    <button onclick="showRules()">RULE</button>
-    <button onclick="showTutorial()">TUTORIAL</button>
+    <button onclick="showModeSelect()">開始遊戲</button>
+    <button onclick="showDifficulty()">難度調整</button>
+    <button onclick="showSound()">音效設定</button>
+    <button onclick="showRules()">遊戲規則</button>
+    <button onclick="showTutorial()">遊戲教程</button>
     <button class="theme-toggle" onclick="toggleTheme()">切換主題</button>
     <p id="themeLabel">當前主題：預設</p>
   </div>
@@ -586,11 +655,10 @@
     <button onclick="startSinglePlayer()">單人模式 (AI)</button>
     <button onclick="startMultiplayer()">雙人模式 (真人)</button>
     <button onclick="startTimeChallenge()">時間挑戰模式</button>
-    <button onclick="startInfernoMode()">地獄模式</button>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
-  <div class="settings" id="settings">
-    <p>遊戲設置</p>
+  <div class="difficulty" id="difficultyMenu">
+    <h2>難度調整</h2>
     <select id="difficulty">
       <option value="easy">簡單</option>
       <option value="normal">普通</option>
@@ -600,38 +668,46 @@
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
   <div class="sound" id="sound">
-    <p>音效控制</p>
-    <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+    <h2>音效設定</h2>
+    <div class="volume-container">
+      <p>音量：</p>
+      <input type="range" id="volume" min="0" max="1" step="0.1" value="1" oninput="updateVolumeBar()">
+      <div class="volume-bar">
+        <div class="volume-level" id="volumeLevel"></div>
+      </div>
+    </div>
+    <button id="testSound" onclick="testSound()">測試音效</button>
+    <label>
+      <input type="checkbox" id="soundToggle" onchange="toggleSound()"> 開啟音效
+    </label>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
   <div class="rules" id="rules">
-    <p>遊戲規則</p>
+    <h2>遊戲規則</h2>
     <ul>
       <li>單人模式：你 (X) 對戰 AI (O)。</li>
       <li>雙人模式：與朋友 (O) 輪流對戰。</li>
       <li>時間挑戰模式：每回合 10 秒，時間到自動下棋！</li>
-      <li>地獄模式：極難模式，AI 幾乎無敵！</li>
-      <li>每種符號最多 3 個，第四個放進去時，第一個會消失！（地獄模式下隨機移除）</li>
+      <li>每種符號最多 3 個，第四個放進去時，第一個會消失！</li>
       <li>連成一條線（橫、縱或對角線）就勝利！</li>
       <li>點「重新開始」可以重玩。</li>
-      <li>用 Chrome 或 Firefox 玩，如果看不到畫面，清空快取試試！</li>
+      <li>使用 Chrome 或 Firefox 玩，如果看不到畫面，清空快取試試！</li>
     </ul>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
   <div class="tutorial" id="tutorial" style="display: none;">
     <h2>遊戲教程</h2>
     <ul>
-      <li>選擇「單人模式」、「雙人模式」、「時間挑戰模式」或「地獄模式」開始。</li>
+      <li>選擇「單人模式」、「雙人模式」或「時間挑戰模式」開始。</li>
       <li>單人模式：你用 X，AI 用 O，輪流下棋。</li>
       <li>雙人模式：與朋友輪流，X 和 O 交替。</li>
       <li>時間挑戰模式：每回合 10 秒，時間到自動下棋。</li>
-      <li>地獄模式：極難挑戰，AI 幾乎無敵，符號移除隨機化。</li>
       <li>連成一線（橫、縱或對角）獲勝。</li>
-      <li>最多 3 個符號，第四個會替換第一個（地獄模式下隨機移除）。</li>
+      <li>最多 3 個符號，第四個會替換第一個。</li>
       <li>點「重新開始」重置遊戲。</li>
       <li>點「返回主介面」回到菜單。</li>
       <li>點「提示」按鈕可獲得 AI 建議的下一步（僅在簡單模式有效）。</li>
-      <li>完成成就（如「初戰勝利」或「地獄征服者」）以增加樂趣！</li>
+      <li>完成成就（如「初戰勝利」或「連勝三場」）以增加樂趣！</li>
       <li>得分和成就進度會自動保存，刷新頁面也不會重置。</li>
     </ul>
     <button class="back-button" onclick="backToMenu()">返回</button>
@@ -662,7 +738,7 @@
   <script>
     const menu = document.getElementById('menu');
     const modeSelect = document.getElementById('modeSelect');
-    const settings = document.getElementById('settings');
+    const difficultyMenu = document.getElementById('difficultyMenu');
     const sound = document.getElementById('sound');
     const rules = document.getElementById('rules');
     const tutorial = document.getElementById('tutorial');
@@ -676,16 +752,18 @@
     const achievementPopup = document.getElementById('achievementPopup');
     const roomInput = document.getElementById('roomInput');
     const themeLabel = document.getElementById('themeLabel');
+    const volume = document.getElementById('volume');
+    const volumeLevel = document.getElementById('volumeLevel');
+    const soundToggle = document.getElementById('soundToggle');
     let board = Array(9).fill(null);
     let currentPlayer = 'X';
     let moveHistory = { X: [], O: [] };
-    let gameMode = 'single'; // 'single', 'multi', 'time', 'inferno'
+    let gameMode = 'single'; // 'single', 'multi', 'time'
     let scores = { player: 0, opponent: 0 };
     let achievements = {
       firstWin: { unlocked: false, name: '初戰勝利' },
       threeWins: { unlocked: false, name: '連勝三場', count: 0 },
-      timeMaster: { unlocked: false, name: '時間挑戰大師' },
-      infernoConqueror: { unlocked: false, name: '地獄征服者' }
+      timeMaster: { unlocked: false, name: '時間挑戰大師' }
     };
     let winStreak = 0;
     let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3?v=1.1');
@@ -693,12 +771,14 @@
     let currentTheme = 'default'; // 'default', 'retro-pixel', 'futuristic', 'cyberpunk'
     let timeLeft = 10;
     let timerInterval = null;
+    let isSoundEnabled = true;
 
     // 載入保存的數據
     function loadGameData() {
       const savedScores = localStorage.getItem('tictactoeScores');
       const savedAchievements = localStorage.getItem('tictactoeAchievements');
       const savedTheme = localStorage.getItem('tictactoeTheme');
+      const savedSound = localStorage.getItem('tictactoeSound');
 
       if (savedScores) {
         scores = JSON.parse(savedScores);
@@ -710,6 +790,10 @@
         currentTheme = savedTheme;
         applyTheme();
       }
+      if (savedSound !== null) {
+        isSoundEnabled = JSON.parse(savedSound);
+        soundToggle.checked = isSoundEnabled;
+      }
     }
 
     // 保存數據到 localStorage
@@ -717,6 +801,7 @@
       localStorage.setItem('tictactoeScores', JSON.stringify(scores));
       localStorage.setItem('tictactoeAchievements', JSON.stringify(achievements));
       localStorage.setItem('tictactoeTheme', currentTheme);
+      localStorage.setItem('tictactoeSound', JSON.stringify(isSoundEnabled));
     }
 
     // 初次載入遊戲數據
@@ -785,27 +870,11 @@
       playSound();
     }
 
-    function startInfernoMode() {
-      gameMode = 'inferno';
-      document.getElementById('difficulty').value = 'inferno';
-      modeSelect.style.display = 'none';
-      gameContainer.style.display = 'flex';
-      roomInput.style.display = 'none';
-      timerDisplay.style.display = 'none';
-      initializeGame();
-      setupSinglePlayer();
-      // AI 先手，選擇最佳位置（中心）
-      placeMove(4, 'O');
-      currentPlayer = 'X';
-      status.textContent = `輪到你 (X)`;
-      playSound();
-    }
-
     function initializeGame() {
       board = Array(9).fill(null);
       moveHistory = { X: [], O: [] };
       currentPlayer = 'X';
-      status.textContent = gameMode === 'single' ? `輪到你 (X)` : `輪到你 (X)`;
+      status.textContent = gameMode === 'single' ? '輪到你 (X)' : '輪到你 (X)';
       status.classList.remove('win');
       timeLeft = 10;
       timerDisplay.textContent = `剩餘時間: ${timeLeft}秒`;
@@ -840,9 +909,9 @@
       });
     }
 
-    function showSettings() {
+    function showDifficulty() {
       menu.style.display = 'none';
-      settings.style.display = 'flex';
+      difficultyMenu.style.display = 'flex';
     }
 
     function showSound() {
@@ -863,7 +932,7 @@
     function backToMenu() {
       menu.style.display = 'flex';
       modeSelect.style.display = 'none';
-      settings.style.display = 'none';
+      difficultyMenu.style.display = 'none';
       sound.style.display = 'none';
       rules.style.display = 'none';
       tutorial.style.display = 'none';
@@ -872,15 +941,34 @@
     }
 
     function playSound() {
-      const volume = document.getElementById('volume')?.value || 1;
-      clickSound.volume = volume;
-      clickSound.play();
+      if (isSoundEnabled) {
+        const volumeValue = document.getElementById('volume')?.value || 1;
+        clickSound.volume = volumeValue;
+        clickSound.play();
+      }
     }
 
     function playVictorySound() {
-      const volume = document.getElementById('volume')?.value || 1;
-      victorySound.volume = volume;
-      victorySound.play();
+      if (isSoundEnabled) {
+        const volumeValue = document.getElementById('volume')?.value || 1;
+        victorySound.volume = volumeValue;
+        victorySound.play();
+      }
+    }
+
+    function testSound() {
+      playSound();
+    }
+
+    function toggleSound() {
+      isSoundEnabled = soundToggle.checked;
+      saveGameData();
+    }
+
+    function updateVolumeBar() {
+      const volumeValue = volume.value;
+      volumeLevel.style.width = `${volumeValue * 100}%`;
+      playSound();
     }
 
     function placeMove(index, player, auto = false) {
@@ -893,15 +981,7 @@
       }
       moveHistory[player].push(index);
       if (moveHistory[player].length > 3) {
-        let oldIndex;
-        if (gameMode === 'inferno') {
-          // 地獄模式：隨機移除一個符號
-          const randomIndex = Math.floor(Math.random() * moveHistory[player].length);
-          oldIndex = moveHistory[player].splice(randomIndex, 1)[0];
-        } else {
-          // 其他模式：移除最早的符號
-          oldIndex = moveHistory[player].shift();
-        }
+        let oldIndex = moveHistory[player].shift();
         board[oldIndex] = null;
         boxes[oldIndex].textContent = '';
         boxes[oldIndex].classList.remove('active', 'random-color-1', 'random-color-2', 'random-color-3');
@@ -918,8 +998,6 @@
       } else if (gameMode === 'time') {
         setupSinglePlayer();
         startTimer();
-      } else if (gameMode === 'inferno') {
-        startInfernoMode();
       }
     }
 
@@ -950,7 +1028,7 @@
                 return;
               }
               currentPlayer = 'O';
-              status.textContent = `輪到 AI (O)`;
+              status.textContent = '輪到 AI (O)';
               setTimeout(aiMove, 500);
             }
           }
@@ -1011,11 +1089,6 @@
         showAchievementPopup(achievements.timeMaster.name);
         newUnlock = true;
       }
-      if (!achievements.infernoConqueror.unlocked && gameMode === 'inferno' && currentPlayer === 'X') {
-        achievements.infernoConqueror.unlocked = true;
-        showAchievementPopup(achievements.infernoConqueror.name);
-        newUnlock = true;
-      }
       if (newUnlock) {
         updateAchievementsDisplay();
         saveGameData();
@@ -1054,7 +1127,7 @@
       }
 
       currentPlayer = 'O';
-      status.textContent = gameMode === 'time' ? `輪到 AI (O)` : `輪到 AI (O)`;
+      status.textContent = gameMode === 'time' ? '輪到 AI (O)' : '輪到 AI (O)';
       if (gameMode === 'time') {
         clearInterval(timerInterval);
         setTimeout(() => {
@@ -1082,7 +1155,7 @@
       }
 
       currentPlayer = 'O';
-      status.textContent = `輪到對手 (O)`;
+      status.textContent = '輪到對手 (O)';
       setTimeout(() => {
         let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
         if (emptyCells.length > 0) {
@@ -1098,7 +1171,7 @@
             return;
           }
           currentPlayer = 'X';
-          status.textContent = `輪到你 (X)`;
+          status.textContent = '輪到你 (X)';
         }
       }, 500);
     }
@@ -1156,7 +1229,7 @@
 
     function aiMove() {
       if (checkWinner()) {
-        status.textContent = `AI (O) 勝利！`;
+        status.textContent = 'AI (O) 勝利！';
         status.classList.add('win');
         updateScores('opponent');
         checkAchievements();
@@ -1172,23 +1245,18 @@
       let moveIndex = -1;
 
       if (difficulty === 'inferno') {
-        // 地獄模式：極難 AI
-        // 1. 檢查 AI 是否能贏
         const winMove = checkForWin('O');
         if (winMove.canWin && winMove.index !== -1) {
           moveIndex = winMove.index;
         } else {
-          // 2. 阻擋玩家的勝利
           const blockMove = checkForWin('X');
           if (blockMove.canWin && blockMove.index !== -1) {
             moveIndex = blockMove.index;
           } else {
-            // 3. 設置陷阱（創造多個勝利機會）
             const trapMove = checkForTrap('O');
             if (trapMove !== -1) {
               moveIndex = trapMove;
             } else {
-              // 4. 選擇最佳位置（中心 > 角落 > 邊）
               const priority = [4, 0, 2, 6, 8, 1, 3, 5, 7];
               moveIndex = priority.find(idx => !board[idx]);
             }
@@ -1217,7 +1285,7 @@
 
       placeMove(moveIndex, 'O');
       if (checkWinner()) {
-        status.textContent = `AI (O) 勝利！`;
+        status.textContent = 'AI (O) 勝利！';
         status.classList.add('win');
         updateScores('opponent');
         checkAchievements();
@@ -1227,7 +1295,7 @@
       }
 
       currentPlayer = 'X';
-      status.textContent = `輪到你 (X)`;
+      status.textContent = '輪到你 (X)';
       if (gameMode === 'time') startTimer();
     }
 
