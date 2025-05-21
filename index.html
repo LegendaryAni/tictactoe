@@ -12,10 +12,14 @@
     }
     body {
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
+      transition: background 0.5s;
     }
-    .menu, .mode-select {
+    body.cyberpunk {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    }
+    .menu, .mode-select, .tutorial {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -23,17 +27,18 @@
       height: 100vh;
       text-align: center;
     }
-    .menu h1, .mode-select h2 {
+    .menu h1, .mode-select h2, .tutorial h2 {
       color: #fff;
       margin-bottom: 20px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
     .menu h1 {
       font-size: 48px;
     }
-    .mode-select h2 {
+    .mode-select h2, .tutorial h2 {
       font-size: 36px;
     }
-    .menu button, .mode-select button {
+    .menu button, .mode-select button, .tutorial button {
       width: 200px;
       padding: 15px;
       margin: 10px 0;
@@ -43,10 +48,22 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     }
-    .menu button:hover, .mode-select button:hover {
+    .menu button:hover, .mode-select button:hover, .tutorial button:hover {
       background: #00bfff;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #00bfff;
+    }
+    .cyberpunk .menu button, .cyberpunk .mode-select button, .cyberpunk .tutorial button {
+      background: #ff007a;
+      border: 2px solid #00ffea;
+      box-shadow: 0 0 10px #ff007a;
+      text-shadow: 0 0 5px #ff007a;
+    }
+    .cyberpunk .menu button:hover, .cyberpunk .mode-select button:hover, .cyberpunk .tutorial button:hover {
+      background: #00ffea;
+      box-shadow: 0 0 15px #00ffea;
     }
     .settings, .sound, .rules {
       display: none;
@@ -61,11 +78,11 @@
       margin-bottom: 20px;
       text-align: center;
     }
-    .rules ul {
+    .rules ul, .tutorial ul {
       list-style-type: none;
       padding: 0;
     }
-    .rules li {
+    .rules li, .tutorial li {
       font-size: 20px;
       margin: 10px 0;
     }
@@ -75,6 +92,13 @@
       margin-bottom: 20px;
       border-radius: 5px;
       border: none;
+      background: #fff;
+      color: #333;
+    }
+    .cyberpunk .settings select, .cyberpunk .sound input {
+      background: #1a1a3d;
+      color: #00ffea;
+      border: 1px solid #ff007a;
     }
     .back-button {
       padding: 10px 20px;
@@ -84,10 +108,20 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, box-shadow 0.3s;
     }
     .back-button:hover {
       background: #333;
+      box-shadow: 0 0 10px #333;
+    }
+    .cyberpunk .back-button {
+      background: #ff007a;
+      border: 2px solid #00ffea;
+      box-shadow: 0 0 10px #ff007a;
+    }
+    .cyberpunk .back-button:hover {
+      background: #00ffea;
+      box-shadow: 0 0 15px #00ffea;
     }
     .game-container {
       display: none;
@@ -111,11 +145,40 @@
       font-size: 40px;
       color: #333;
       cursor: pointer;
-      transition: transform 0.2s, background 0.3s;
+      transition: transform 0.2s, background 0.3s, border-color 0.3s;
     }
     .box:hover {
       background: rgba(255, 255, 255, 1);
       transform: scale(1.05);
+    }
+    .box.active {
+      animation: pulse 0.5s;
+    }
+    .cyberpunk .box {
+      background: #1a1a3d;
+      color: #00ffea;
+      border: 2px solid #ff007a;
+      box-shadow: 0 0 5px #ff007a;
+    }
+    .cyberpunk .box:hover {
+      background: #2a2a5d;
+      box-shadow: 0 0 10px #00ffea;
+    }
+    .cyberpunk .box.active {
+      animation: neonPulse 0.5s;
+    }
+    .box.random-color-1 { border-color: #ff5555; box-shadow: 0 0 10px #ff5555; }
+    .box.random-color-2 { border-color: #55ff55; box-shadow: 0 0 10px #55ff55; }
+    .box.random-color-3 { border-color: #5555ff; box-shadow: 0 0 10px #5555ff; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    @keyframes neonPulse {
+      0% { transform: scale(1); box-shadow: 0 0 5px #ff007a; }
+      50% { transform: scale(1.2); box-shadow: 0 0 20px #00ffea; }
+      100% { transform: scale(1); box-shadow: 0 0 5px #ff007a; }
     }
     #reset, #backToMain {
       padding: 10px 20px;
@@ -125,16 +188,83 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, box-shadow 0.3s;
       margin: 5px;
     }
     #reset:hover, #backToMain:hover {
       background: #333;
+      box-shadow: 0 0 10px #333;
+    }
+    .cyberpunk #reset, .cyberpunk #backToMain {
+      background: #ff007a;
+      border: 2px solid #00ffea;
+      box-shadow: 0 0 10px #ff007a;
+    }
+    .cyberpunk #reset:hover, .cyberpunk #backToMain:hover {
+      background: #00ffea;
+      box-shadow: 0 0 15px #00ffea;
     }
     #status {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       font-size: 24px;
       color: #fff;
+      transition: color 0.5s;
+    }
+    #status.win {
+      color: #00ff00;
+      animation: blink 1s infinite;
+    }
+    .cyberpunk #status {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
+    }
+    .cyberpunk #status.win {
+      color: #ff007a;
+      animation: neonBlink 0.8s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    @keyframes neonBlink {
+      50% { opacity: 0; text-shadow: 0 0 10px #ff007a; }
+    }
+    #timer {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .cyberpunk #timer {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
+    }
+    #timer.warning {
+      color: #ff5555;
+      animation: blink 0.5s infinite;
+    }
+    #score {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .cyberpunk #score {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
+    }
+    #achievements {
+      font-size: 18px;
+      color: #fff;
+      margin-top: 10px;
+      max-width: 300px;
+      text-align: left;
+    }
+    .cyberpunk #achievements {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
+    }
+    .achievement-unlocked {
+      animation: neonBlink 1s;
+      color: #ff007a;
+      font-weight: bold;
     }
     #roomInput {
       padding: 10px;
@@ -142,6 +272,39 @@
       margin: 10px 0;
       border-radius: 5px;
       border: none;
+      background: #fff;
+      color: #333;
+    }
+    .cyberpunk #roomInput {
+      background: #1a1a3d;
+      color: #00ffea;
+      border: 1px solid #ff007a;
+    }
+    .theme-toggle {
+      margin-top: 10px;
+      padding: 5px 10px;
+      font-size: 16px;
+      background: #fff;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .theme-toggle:hover {
+      background: #ddd;
+      box-shadow: 0 0 5px #ddd;
+    }
+    .cyberpunk .theme-toggle {
+      background: #ff007a;
+      color: #00ffea;
+      border: 1px solid #00ffea;
+      box-shadow: 0 0 5px #ff007a;
+    }
+    .cyberpunk .theme-toggle:hover {
+      background: #00ffea;
+      color: #ff007a;
+      box-shadow: 0 0 10px #00ffea;
     }
   </style>
 </head>
@@ -152,11 +315,14 @@
     <button onclick="showSettings()">SETTINGS</button>
     <button onclick="showSound()">SOUND</button>
     <button onclick="showRules()">RULE</button>
+    <button onclick="showTutorial()">TUTORIAL</button>
+    <button class="theme-toggle" onclick="toggleTheme()">切換主題</button>
   </div>
   <div class="mode-select" id="modeSelect" style="display: none;">
     <h2>選擇模式</h2>
     <button onclick="startSinglePlayer()">單人模式 (AI)</button>
     <button onclick="startMultiplayer()">雙人模式 (真人)</button>
+    <button onclick="startTimeChallenge()">時間挑戰模式</button>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
   <div class="settings" id="settings">
@@ -178,6 +344,7 @@
     <ul>
       <li>單人模式：你 (X) 對戰 AI (O)。</li>
       <li>雙人模式：與朋友 (O) 輪流對戰。</li>
+      <li>時間挑戰模式：每回合 10 秒，時間到自動下棋！</li>
       <li>每種符號最多 3 個，第四個放進去時，第一個會消失！</li>
       <li>連成一條線（橫、縱或對角線）就勝利！</li>
       <li>點「重新開始」可以重玩。</li>
@@ -185,8 +352,26 @@
     </ul>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
+  <div class="tutorial" id="tutorial" style="display: none;">
+    <h2>遊戲教程</h2>
+    <ul>
+      <li>選擇「單人模式」、「雙人模式」或「時間挑戰模式」開始。</li>
+      <li>單人模式：你用 X，AI 用 O，輪流下棋。</li>
+      <li>雙人模式：與朋友輪流，X 和 O 交替。</li>
+      <li>時間挑戰模式：每回合 10 秒，時間到自動下棋。</li>
+      <li>連成一線（橫、縱或對角）獲勝。</li>
+      <li>最多 3 個符號，第四個會替換第一個。</li>
+      <li>點「重新開始」重置遊戲。</li>
+      <li>點「返回主介面」回到菜單。</li>
+      <li>完成成就（如「初戰勝利」）以增加樂趣！</li>
+    </ul>
+    <button class="back-button" onclick="backToMenu()">返回</button>
+  </div>
   <div class="game-container" id="gameContainer">
+    <p id="score">得分 - 你: 0 | 對手/AI: 0</p>
+    <p id="timer" style="display: none;">剩餘時間: 10秒</p>
     <p id="status">輪到你 (X)</p>
+    <p id="achievements"></p>
     <div class="game" id="gameBoard">
       <button class="box" data-index="0"></button>
       <button class="box" data-index="1"></button>
@@ -209,17 +394,31 @@
     const settings = document.getElementById('settings');
     const sound = document.getElementById('sound');
     const rules = document.getElementById('rules');
+    const tutorial = document.getElementById('tutorial');
     const gameContainer = document.getElementById('gameContainer');
     const boxes = document.querySelectorAll('.box');
     const resetButton = document.getElementById('reset');
     const status = document.getElementById('status');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const achievementsDisplay = document.getElementById('achievements');
     const roomInput = document.getElementById('roomInput');
     let board = Array(9).fill(null);
     let currentPlayer = 'X';
     let moveHistory = { X: [], O: [] };
-    let gameMode = 'single'; // 'single' 或 'multi'
+    let gameMode = 'single'; // 'single', 'multi', 或 'time'
+    let scores = { player: 0, opponent: 0 };
+    let achievements = {
+      firstWin: { unlocked: false, name: '初戰勝利' },
+      threeWins: { unlocked: false, name: '連勝三場', count: 0 },
+      timeMaster: { unlocked: false, name: '時間挑戰大師' }
+    };
+    let winStreak = 0;
     let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
     let victorySound = new Audio('https://www.myinstants.com/media/sounds/mario-coin.mp3');
+    let isCyberpunkTheme = false;
+    let timeLeft = 10;
+    let timerInterval = null;
 
     function showModeSelect() {
       menu.style.display = 'none';
@@ -231,6 +430,7 @@
       modeSelect.style.display = 'none';
       gameContainer.style.display = 'flex';
       roomInput.style.display = 'none';
+      timerDisplay.style.display = 'none';
       initializeGame();
       setupSinglePlayer();
       playSound();
@@ -241,9 +441,22 @@
       modeSelect.style.display = 'none';
       gameContainer.style.display = 'flex';
       roomInput.style.display = 'inline-block';
+      timerDisplay.style.display = 'none';
       status.textContent = '輸入房間號並等待對手';
       initializeGame();
       setupMultiplayer();
+    }
+
+    function startTimeChallenge() {
+      gameMode = 'time';
+      modeSelect.style.display = 'none';
+      gameContainer.style.display = 'flex';
+      roomInput.style.display = 'none';
+      timerDisplay.style.display = 'block';
+      initializeGame();
+      setupSinglePlayer();
+      startTimer();
+      playSound();
     }
 
     function initializeGame() {
@@ -251,10 +464,18 @@
       moveHistory = { X: [], O: [] };
       currentPlayer = 'X';
       status.textContent = gameMode === 'single' ? `輪到你 (X)` : `輪到你 (X)`;
+      status.classList.remove('win');
+      timeLeft = 10;
+      timerDisplay.textContent = `剩餘時間: ${timeLeft}秒`;
+      timerDisplay.classList.remove('warning');
       boxes.forEach(box => {
         box.textContent = '';
         box.disabled = false;
+        box.classList.remove('active', 'random-color-1', 'random-color-2', 'random-color-3');
       });
+      updateScoreDisplay();
+      updateAchievementsDisplay();
+      if (gameMode !== 'time') clearInterval(timerInterval);
     }
 
     function setupSinglePlayer() {
@@ -286,13 +507,20 @@
       rules.style.display = 'flex';
     }
 
+    function showTutorial() {
+      menu.style.display = 'none';
+      tutorial.style.display = 'flex';
+    }
+
     function backToMenu() {
       menu.style.display = 'flex';
       modeSelect.style.display = 'none';
       settings.style.display = 'none';
       sound.style.display = 'none';
       rules.style.display = 'none';
+      tutorial.style.display = 'none';
       gameContainer.style.display = 'none';
+      clearInterval(timerInterval);
     }
 
     function playSound() {
@@ -307,14 +535,20 @@
       victorySound.play();
     }
 
-    function placeMove(index, player) {
+    function placeMove(index, player, auto = false) {
       board[index] = player;
       boxes[index].textContent = player;
+      boxes[index].classList.add('active');
+      if (!auto) {
+        const randomColor = Math.floor(Math.random() * 3) + 1;
+        boxes[index].classList.add(`random-color-${randomColor}`);
+      }
       moveHistory[player].push(index);
       if (moveHistory[player].length > 3) {
         const oldIndex = moveHistory[player].shift();
         board[oldIndex] = null;
         boxes[oldIndex].textContent = '';
+        boxes[oldIndex].classList.remove('active', 'random-color-1', 'random-color-2', 'random-color-3');
       }
       playSound();
     }
@@ -323,9 +557,87 @@
       initializeGame();
       if (gameMode === 'single') {
         setupSinglePlayer();
-      } else {
+      } else if (gameMode === 'multi') {
         setupMultiplayer();
+      } else {
+        setupSinglePlayer();
+        startTimer();
       }
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeLeft = 10;
+      timerDisplay.textContent = `剩餘時間: ${timeLeft}秒`;
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `剩餘時間: ${timeLeft}秒`;
+        if (timeLeft <= 3) {
+          timerDisplay.classList.add('warning');
+        }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          if (currentPlayer === 'X' && !checkWinner()) {
+            let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
+            if (emptyCells.length > 0) {
+              const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+              placeMove(randomIndex, 'X', true);
+              if (checkWinner()) {
+                status.textContent = `${currentPlayer} 勝利！`;
+                status.classList.add('win');
+                updateScores('player');
+                checkAchievements();
+                disableBoard();
+                playVictorySound();
+                return;
+              }
+              currentPlayer = 'O';
+              status.textContent = `輪到 AI (O)`;
+              setTimeout(aiMove, 500);
+            }
+          }
+        }
+      }, 1000);
+    }
+
+    function updateScores(winner) {
+      if (winner === 'player') {
+        scores.player++;
+        winStreak++;
+        if (winStreak >= 3) achievements.threeWins.count = winStreak;
+      } else if (winner === 'opponent') {
+        scores.opponent++;
+        winStreak = 0;
+      }
+      updateScoreDisplay();
+    }
+
+    function updateScoreDisplay() {
+      const opponentLabel = gameMode === 'multi' ? '對手' : 'AI';
+      scoreDisplay.textContent = `得分 - 你: ${scores.player} | ${opponentLabel}: ${scores.opponent}`;
+    }
+
+    function updateAchievementsDisplay() {
+      let achievementsText = '成就:\n';
+      for (let key in achievements) {
+        if (achievements[key].unlocked) {
+          achievementsText += `- ${achievements[key].name} (已解鎖)\n`;
+        }
+      }
+      achievementsDisplay.textContent = achievementsText || '成就: 無 (開始遊戲解鎖吧！)';
+    }
+
+    function checkAchievements() {
+      if (!achievements.firstWin.unlocked && scores.player === 1) {
+        achievements.firstWin.unlocked = true;
+      }
+      if (!achievements.threeWins.unlocked && achievements.threeWins.count >= 3) {
+        achievements.threeWins.unlocked = true;
+      }
+      if (!achievements.timeMaster.unlocked && gameMode === 'time' && currentPlayer === 'X') {
+        achievements.timeMaster.unlocked = true;
+      }
+      updateAchievementsDisplay();
     }
 
     function handleSinglePlayerMove() {
@@ -334,15 +646,26 @@
 
       placeMove(index, 'X');
       if (checkWinner()) {
-        status.textContent = `你 (X) 勝利！`;
+        status.textContent = `${currentPlayer} 勝利！`;
+        status.classList.add('win');
+        updateScores('player');
+        checkAchievements();
         disableBoard();
         playVictorySound();
         return;
       }
 
       currentPlayer = 'O';
-      status.textContent = `輪到 AI (O)`;
-      setTimeout(aiMove, 500);
+      status.textContent = gameMode === 'time' ? `輪到 AI (O)` : `輪到 AI (O)`;
+      if (gameMode === 'time') {
+        clearInterval(timerInterval);
+        setTimeout(() => {
+          aiMove();
+          startTimer();
+        }, 500);
+      } else {
+        setTimeout(aiMove, 500);
+      }
     }
 
     function handleMultiplayerMove() {
@@ -351,7 +674,10 @@
 
       placeMove(index, 'X');
       if (checkWinner()) {
-        status.textContent = `你 (X) 勝利！`;
+        status.textContent = `${currentPlayer} 勝利！`;
+        status.classList.add('win');
+        updateScores('player');
+        checkAchievements();
         disableBoard();
         playVictorySound();
         return;
@@ -365,7 +691,10 @@
           const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
           placeMove(randomIndex, 'O');
           if (checkWinner()) {
-            status.textContent = `對手 (O) 勝利！`;
+            status.textContent = `${currentPlayer} 勝利！`;
+            status.classList.add('win');
+            updateScores('opponent');
+            checkAchievements();
             disableBoard();
             playVictorySound();
             return;
@@ -403,6 +732,9 @@
     function aiMove() {
       if (checkWinner()) {
         status.textContent = `AI (O) 勝利！`;
+        status.classList.add('win');
+        updateScores('opponent');
+        checkAchievements();
         disableBoard();
         playVictorySound();
         return;
@@ -438,6 +770,9 @@
       placeMove(moveIndex, 'O');
       if (checkWinner()) {
         status.textContent = `AI (O) 勝利！`;
+        status.classList.add('win');
+        updateScores('opponent');
+        checkAchievements();
         disableBoard();
         playVictorySound();
         return;
@@ -445,6 +780,7 @@
 
       currentPlayer = 'X';
       status.textContent = `輪到你 (X)`;
+      if (gameMode === 'time') startTimer();
     }
 
     function checkWinner() {
@@ -461,6 +797,16 @@
 
     function disableBoard() {
       boxes.forEach(box => box.disabled = true);
+      clearInterval(timerInterval);
+    }
+
+    function toggleTheme() {
+      isCyberpunkTheme = !isCyberpunkTheme;
+      if (isCyberpunkTheme) {
+        document.body.classList.add('cyberpunk');
+      } else {
+        document.body.classList.remove('cyberpunk');
+      }
     }
   </script>
 </body>
