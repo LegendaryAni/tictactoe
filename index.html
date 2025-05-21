@@ -117,7 +117,7 @@
       background: rgba(255, 255, 255, 1);
       transform: scale(1.05);
     }
-    #reset {
+    #reset, #backToMain {
       padding: 10px 20px;
       font-size: 18px;
       background: #191913;
@@ -126,8 +126,9 @@
       border-radius: 10px;
       cursor: pointer;
       transition: background 0.3s;
+      margin: 5px;
     }
-    #reset:hover {
+    #reset:hover, #backToMain:hover {
       background: #333;
     }
     #status {
@@ -199,6 +200,7 @@
     </div>
     <input type="text" id="roomInput" placeholder="輸入房間號 (雙人模式)" style="display: none;">
     <button id="reset" onclick="resetGame()">重新開始</button>
+    <button id="backToMain" onclick="backToMenu()">返回主介面</button>
   </div>
 
   <script>
@@ -374,6 +376,30 @@
       }, 500);
     }
 
+    function checkForWin(player) {
+      const winConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // 橫行
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // 直行
+        [0, 4, 8], [2, 4, 6]             // 對角線
+      ];
+
+      for (let condition of winConditions) {
+        if (condition.every(index => board[index] === player)) {
+          return true;
+        }
+        let emptyIndex = -1;
+        let count = 0;
+        for (let index of condition) {
+          if (board[index] === player) count++;
+          else if (!board[index]) emptyIndex = index;
+        }
+        if (count === 2 && emptyIndex !== -1) {
+          return { canWin: true, index: emptyIndex };
+        }
+      }
+      return false;
+    }
+
     function aiMove() {
       if (checkWinner()) {
         status.textContent = `AI (O) 勝利！`;
@@ -383,15 +409,38 @@
       }
 
       let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
-      if (emptyCells.length > 0) {
-        const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-        placeMove(randomIndex, 'O');
-        if (checkWinner()) {
-          status.textContent = `AI (O) 勝利！`;
-          disableBoard();
-          playVictorySound();
-          return;
+      if (emptyCells.length === 0) return;
+
+      const difficulty = document.getElementById('difficulty').value;
+
+      let moveIndex = -1;
+      if (difficulty === 'hard') {
+        const winMove = checkForWin('O');
+        if (winMove && winMove.canWin) {
+          moveIndex = winMove.index;
+        } else {
+          const blockMove = checkForWin('X');
+          if (blockMove && blockMove.canWin) {
+            moveIndex = blockMove.index;
+          }
         }
+      } else if (difficulty === 'normal') {
+        const blockMove = checkForWin('X');
+        if (blockMove && blockMove.canWin) {
+          moveIndex = blockMove.index;
+        }
+      }
+
+      if (moveIndex === -1) {
+        moveIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+      }
+
+      placeMove(moveIndex, 'O');
+      if (checkWinner()) {
+        status.textContent = `AI (O) 勝利！`;
+        disableBoard();
+        playVictorySound();
+        return;
       }
 
       currentPlayer = 'X';
