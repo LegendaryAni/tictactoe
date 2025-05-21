@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>圈圈叉叉</title>
   <style>
     * {
@@ -15,6 +18,13 @@
       font-family: 'Courier New', monospace;
       overflow: hidden;
       transition: background 0.5s;
+    }
+    body.retro-pixel {
+      background: #000;
+      font-family: 'Press Start 2P', monospace;
+    }
+    body.futuristic {
+      background: linear-gradient(135deg, #1a1a3d, #005f73);
     }
     body.cyberpunk {
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -31,6 +41,18 @@
       color: #fff;
       margin-bottom: 20px;
       text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .retro-pixel .menu h1, .retro-pixel .mode-select h2, .retro-pixel .tutorial h2 {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .futuristic .menu h1, .futuristic .mode-select h2, .futuristic .tutorial h2 {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
+    .cyberpunk .menu h1, .cyberpunk .mode-select h2, .cyberpunk .tutorial h2 {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
     }
     .menu h1 {
       font-size: 48px;
@@ -54,6 +76,33 @@
       background: #00bfff;
       transform: scale(1.05);
       box-shadow: 0 0 10px #00bfff;
+    }
+    .menu button:focus, .mode-select button:focus, .tutorial button:focus {
+      outline: 3px solid #00bfff;
+    }
+    .retro-pixel .menu button, .retro-pixel .mode-select button, .retro-pixel .tutorial button {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      font-family: 'Press Start 2P', monospace;
+      box-shadow: 4px 4px #000;
+    }
+    .retro-pixel .menu button:hover, .retro-pixel .mode-select button:hover, .retro-pixel .tutorial button:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic .menu button, .futuristic .mode-select button, .futuristic .tutorial button {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 10px #00d4ff;
+    }
+    .futuristic .menu button:hover, .futuristic .mode-select button:hover, .futuristic .tutorial button:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 15px #00d4ff;
     }
     .cyberpunk .menu button, .cyberpunk .mode-select button, .cyberpunk .tutorial button {
       background: #ff007a;
@@ -95,6 +144,17 @@
       background: #fff;
       color: #333;
     }
+    .retro-pixel .settings select, .retro-pixel .sound input {
+      background: #ff0;
+      color: #f00;
+      border: 2px solid #f00;
+      border-radius: 0;
+    }
+    .futuristic .settings select, .futuristic .sound input {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+    }
     .cyberpunk .settings select, .cyberpunk .sound input {
       background: #1a1a3d;
       color: #00ffea;
@@ -113,6 +173,32 @@
     .back-button:hover {
       background: #333;
       box-shadow: 0 0 10px #333;
+    }
+    .back-button:focus {
+      outline: 3px solid #333;
+    }
+    .retro-pixel .back-button {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 4px 4px #000;
+    }
+    .retro-pixel .back-button:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic .back-button {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 10px #00d4ff;
+    }
+    .futuristic .back-button:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 15px #00d4ff;
     }
     .cyberpunk .back-button {
       background: #ff007a;
@@ -151,8 +237,34 @@
       background: rgba(255, 255, 255, 1);
       transform: scale(1.05);
     }
+    .box:focus {
+      outline: 3px solid #1e90ff;
+    }
     .box.active {
-      animation: pulse 0.5s;
+      animation: rotateFadeIn 0.5s;
+    }
+    .retro-pixel .box {
+      background: #000;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 2px 2px #f00;
+    }
+    .retro-pixel .box:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 2px 2px #f00;
+    }
+    .futuristic .box {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 5px #00d4ff;
+    }
+    .futuristic .box:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 10px #00d4ff;
     }
     .cyberpunk .box {
       background: #1a1a3d;
@@ -164,23 +276,20 @@
       background: #2a2a5d;
       box-shadow: 0 0 10px #00ffea;
     }
-    .cyberpunk .box.active {
-      animation: neonPulse 0.5s;
-    }
     .box.random-color-1 { border-color: #ff5555; box-shadow: 0 0 10px #ff5555; }
     .box.random-color-2 { border-color: #55ff55; box-shadow: 0 0 10px #55ff55; }
     .box.random-color-3 { border-color: #5555ff; box-shadow: 0 0 10px #5555ff; }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
+    @keyframes rotateFadeIn {
+      0% { transform: rotate(0deg) scale(0); opacity: 0; }
+      50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; }
+      100% { transform: rotate(360deg) scale(1); opacity: 1; }
     }
     @keyframes neonPulse {
       0% { transform: scale(1); box-shadow: 0 0 5px #ff007a; }
       50% { transform: scale(1.2); box-shadow: 0 0 20px #00ffea; }
       100% { transform: scale(1); box-shadow: 0 0 5px #ff007a; }
     }
-    #reset, #backToMain {
+    #reset, #backToMain, #hint {
       padding: 10px 20px;
       font-size: 18px;
       background: #191913;
@@ -191,16 +300,42 @@
       transition: background 0.3s, box-shadow 0.3s;
       margin: 5px;
     }
-    #reset:hover, #backToMain:hover {
+    #reset:hover, #backToMain:hover, #hint:hover {
       background: #333;
       box-shadow: 0 0 10px #333;
     }
-    .cyberpunk #reset, .cyberpunk #backToMain {
+    #reset:focus, #backToMain:focus, #hint:focus {
+      outline: 3px solid #333;
+    }
+    .retro-pixel #reset, .retro-pixel #backToMain, .retro-pixel #hint {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 4px 4px #000;
+    }
+    .retro-pixel #reset:hover, .retro-pixel #backToMain:hover, .retro-pixel #hint:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic #reset, .futuristic #backToMain, .futuristic #hint {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 10px #00d4ff;
+    }
+    .futuristic #reset:hover, .futuristic #backToMain:hover, .futuristic #hint:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 15px #00d4ff;
+    }
+    .cyberpunk #reset, .cyberpunk #backToMain, .cyberpunk #hint {
       background: #ff007a;
       border: 2px solid #00ffea;
       box-shadow: 0 0 10px #ff007a;
     }
-    .cyberpunk #reset:hover, .cyberpunk #backToMain:hover {
+    .cyberpunk #reset:hover, .cyberpunk #backToMain:hover, .cyberpunk #hint:hover {
       background: #00ffea;
       box-shadow: 0 0 15px #00ffea;
     }
@@ -211,6 +346,22 @@
       transition: color 0.5s;
     }
     #status.win {
+      color: #00ff00;
+      animation: blink 1s infinite;
+    }
+    .retro-pixel #status {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .retro-pixel #status.win {
+      color: #0f0;
+      animation: blink 1s infinite;
+    }
+    .futuristic #status {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
+    .futuristic #status.win {
       color: #00ff00;
       animation: blink 1s infinite;
     }
@@ -233,6 +384,14 @@
       color: #fff;
       margin-bottom: 10px;
     }
+    .retro-pixel #timer {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .futuristic #timer {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
     .cyberpunk #timer {
       color: #00ffea;
       text-shadow: 0 0 5px #ff007a;
@@ -246,6 +405,14 @@
       color: #fff;
       margin-bottom: 10px;
     }
+    .retro-pixel #score {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .futuristic #score {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
     .cyberpunk #score {
       color: #00ffea;
       text-shadow: 0 0 5px #ff007a;
@@ -257,14 +424,54 @@
       max-width: 300px;
       text-align: left;
     }
+    .retro-pixel #achievements {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .futuristic #achievements {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
     .cyberpunk #achievements {
       color: #00ffea;
       text-shadow: 0 0 5px #ff007a;
     }
-    .achievement-unlocked {
-      animation: neonBlink 1s;
-      color: #ff007a;
-      font-weight: bold;
+    #achievementPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 24px;
+      text-align: center;
+      z-index: 1000;
+      transition: transform 0.5s;
+    }
+    #achievementPopup.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .retro-pixel #achievementPopup {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic #achievementPopup {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 20px #00d4ff;
+    }
+    .cyberpunk #achievementPopup {
+      background: rgba(26, 26, 61, 0.9);
+      color: #00ffea;
+      border: 2px solid #ff007a;
+      box-shadow: 0 0 20px #ff007a;
+      text-shadow: 0 0 5px #ff007a;
     }
     #roomInput {
       padding: 10px;
@@ -274,6 +481,17 @@
       border: none;
       background: #fff;
       color: #333;
+    }
+    .retro-pixel #roomInput {
+      background: #ff0;
+      color: #f00;
+      border: 2px solid #f00;
+      border-radius: 0;
+    }
+    .futuristic #roomInput {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
     }
     .cyberpunk #roomInput {
       background: #1a1a3d;
@@ -295,6 +513,32 @@
       background: #ddd;
       box-shadow: 0 0 5px #ddd;
     }
+    .theme-toggle:focus {
+      outline: 3px solid #ddd;
+    }
+    .retro-pixel .theme-toggle {
+      background: #f00;
+      color: #ff0;
+      border: 2px solid #ff0;
+      border-radius: 0;
+      box-shadow: 4px 4px #000;
+    }
+    .retro-pixel .theme-toggle:hover {
+      background: #ff0;
+      color: #f00;
+      box-shadow: 4px 4px #000;
+    }
+    .futuristic .theme-toggle {
+      background: transparent;
+      color: #00d4ff;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 0 5px #00d4ff;
+    }
+    .futuristic .theme-toggle:hover {
+      background: #00d4ff;
+      color: #1a1a3d;
+      box-shadow: 0 0 10px #00d4ff;
+    }
     .cyberpunk .theme-toggle {
       background: #ff007a;
       color: #00ffea;
@@ -306,7 +550,25 @@
       color: #ff007a;
       box-shadow: 0 0 10px #00ffea;
     }
+    #themeLabel {
+      font-size: 16px;
+      color: #fff;
+      margin-top: 10px;
+    }
+    .retro-pixel #themeLabel {
+      color: #ff0;
+      text-shadow: 2px 2px #f00;
+    }
+    .futuristic #themeLabel {
+      color: #00d4ff;
+      text-shadow: 0 0 5px #00d4ff;
+    }
+    .cyberpunk #themeLabel {
+      color: #00ffea;
+      text-shadow: 0 0 5px #ff007a;
+    }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
 </head>
 <body>
   <div class="menu" id="menu">
@@ -317,12 +579,14 @@
     <button onclick="showRules()">RULE</button>
     <button onclick="showTutorial()">TUTORIAL</button>
     <button class="theme-toggle" onclick="toggleTheme()">切換主題</button>
+    <p id="themeLabel">當前主題：預設</p>
   </div>
   <div class="mode-select" id="modeSelect" style="display: none;">
     <h2>選擇模式</h2>
     <button onclick="startSinglePlayer()">單人模式 (AI)</button>
     <button onclick="startMultiplayer()">雙人模式 (真人)</button>
     <button onclick="startTimeChallenge()">時間挑戰模式</button>
+    <button onclick="startInfernoMode()">地獄模式</button>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
   <div class="settings" id="settings">
@@ -331,6 +595,7 @@
       <option value="easy">簡單</option>
       <option value="normal">普通</option>
       <option value="hard">困難</option>
+      <option value="inferno">地獄</option>
     </select>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
@@ -345,7 +610,8 @@
       <li>單人模式：你 (X) 對戰 AI (O)。</li>
       <li>雙人模式：與朋友 (O) 輪流對戰。</li>
       <li>時間挑戰模式：每回合 10 秒，時間到自動下棋！</li>
-      <li>每種符號最多 3 個，第四個放進去時，第一個會消失！</li>
+      <li>地獄模式：極難模式，AI 幾乎無敵！</li>
+      <li>每種符號最多 3 個，第四個放進去時，第一個會消失！（地獄模式下隨機移除）</li>
       <li>連成一條線（橫、縱或對角線）就勝利！</li>
       <li>點「重新開始」可以重玩。</li>
       <li>用 Chrome 或 Firefox 玩，如果看不到畫面，清空快取試試！</li>
@@ -355,15 +621,18 @@
   <div class="tutorial" id="tutorial" style="display: none;">
     <h2>遊戲教程</h2>
     <ul>
-      <li>選擇「單人模式」、「雙人模式」或「時間挑戰模式」開始。</li>
+      <li>選擇「單人模式」、「雙人模式」、「時間挑戰模式」或「地獄模式」開始。</li>
       <li>單人模式：你用 X，AI 用 O，輪流下棋。</li>
       <li>雙人模式：與朋友輪流，X 和 O 交替。</li>
       <li>時間挑戰模式：每回合 10 秒，時間到自動下棋。</li>
+      <li>地獄模式：極難挑戰，AI 幾乎無敵，符號移除隨機化。</li>
       <li>連成一線（橫、縱或對角）獲勝。</li>
-      <li>最多 3 個符號，第四個會替換第一個。</li>
+      <li>最多 3 個符號，第四個會替換第一個（地獄模式下隨機移除）。</li>
       <li>點「重新開始」重置遊戲。</li>
       <li>點「返回主介面」回到菜單。</li>
-      <li>完成成就（如「初戰勝利」）以增加樂趣！</li>
+      <li>點「提示」按鈕可獲得 AI 建議的下一步（僅在簡單模式有效）。</li>
+      <li>完成成就（如「初戰勝利」或「地獄征服者」）以增加樂趣！</li>
+      <li>得分和成就進度會自動保存，刷新頁面也不會重置。</li>
     </ul>
     <button class="back-button" onclick="backToMenu()">返回</button>
   </div>
@@ -384,9 +653,11 @@
       <button class="box" data-index="8"></button>
     </div>
     <input type="text" id="roomInput" placeholder="輸入房間號 (雙人模式)" style="display: none;">
+    <button id="hint" onclick="showHint()">提示</button>
     <button id="reset" onclick="resetGame()">重新開始</button>
     <button id="backToMain" onclick="backToMenu()">返回主介面</button>
   </div>
+  <div id="achievementPopup"></div>
 
   <script>
     const menu = document.getElementById('menu');
@@ -402,23 +673,78 @@
     const scoreDisplay = document.getElementById('score');
     const timerDisplay = document.getElementById('timer');
     const achievementsDisplay = document.getElementById('achievements');
+    const achievementPopup = document.getElementById('achievementPopup');
     const roomInput = document.getElementById('roomInput');
+    const themeLabel = document.getElementById('themeLabel');
     let board = Array(9).fill(null);
     let currentPlayer = 'X';
     let moveHistory = { X: [], O: [] };
-    let gameMode = 'single'; // 'single', 'multi', 或 'time'
+    let gameMode = 'single'; // 'single', 'multi', 'time', 'inferno'
     let scores = { player: 0, opponent: 0 };
     let achievements = {
       firstWin: { unlocked: false, name: '初戰勝利' },
       threeWins: { unlocked: false, name: '連勝三場', count: 0 },
-      timeMaster: { unlocked: false, name: '時間挑戰大師' }
+      timeMaster: { unlocked: false, name: '時間挑戰大師' },
+      infernoConqueror: { unlocked: false, name: '地獄征服者' }
     };
     let winStreak = 0;
-    let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3');
-    let victorySound = new Audio('https://www.myinstants.com/media/sounds/mario-coin.mp3');
-    let isCyberpunkTheme = false;
+    let clickSound = new Audio('https://www.myinstants.com/media/sounds/click.mp3?v=1.1');
+    let victorySound = new Audio('https://www.myinstants.com/media/sounds/mario-coin.mp3?v=1.1');
+    let currentTheme = 'default'; // 'default', 'retro-pixel', 'futuristic', 'cyberpunk'
     let timeLeft = 10;
     let timerInterval = null;
+
+    // 載入保存的數據
+    function loadGameData() {
+      const savedScores = localStorage.getItem('tictactoeScores');
+      const savedAchievements = localStorage.getItem('tictactoeAchievements');
+      const savedTheme = localStorage.getItem('tictactoeTheme');
+
+      if (savedScores) {
+        scores = JSON.parse(savedScores);
+      }
+      if (savedAchievements) {
+        achievements = JSON.parse(savedAchievements);
+      }
+      if (savedTheme) {
+        currentTheme = savedTheme;
+        applyTheme();
+      }
+    }
+
+    // 保存數據到 localStorage
+    function saveGameData() {
+      localStorage.setItem('tictactoeScores', JSON.stringify(scores));
+      localStorage.setItem('tictactoeAchievements', JSON.stringify(achievements));
+      localStorage.setItem('tictactoeTheme', currentTheme);
+    }
+
+    // 初次載入遊戲數據
+    loadGameData();
+
+    function applyTheme() {
+      document.body.classList.remove('retro-pixel', 'futuristic', 'cyberpunk');
+      if (currentTheme === 'retro-pixel') {
+        document.body.classList.add('retro-pixel');
+        themeLabel.textContent = '當前主題：復古像素風';
+      } else if (currentTheme === 'futuristic') {
+        document.body.classList.add('futuristic');
+        themeLabel.textContent = '當前主題：未來科技風';
+      } else if (currentTheme === 'cyberpunk') {
+        document.body.classList.add('cyberpunk');
+        themeLabel.textContent = '當前主題：賽博龐克';
+      } else {
+        themeLabel.textContent = '當前主題：預設';
+      }
+    }
+
+    function toggleTheme() {
+      const themes = ['default', 'retro-pixel', 'futuristic', 'cyberpunk'];
+      const currentIndex = themes.indexOf(currentTheme);
+      currentTheme = themes[(currentIndex + 1) % themes.length];
+      applyTheme();
+      saveGameData();
+    }
 
     function showModeSelect() {
       menu.style.display = 'none';
@@ -459,6 +785,22 @@
       playSound();
     }
 
+    function startInfernoMode() {
+      gameMode = 'inferno';
+      document.getElementById('difficulty').value = 'inferno';
+      modeSelect.style.display = 'none';
+      gameContainer.style.display = 'flex';
+      roomInput.style.display = 'none';
+      timerDisplay.style.display = 'none';
+      initializeGame();
+      setupSinglePlayer();
+      // AI 先手，選擇最佳位置（中心）
+      placeMove(4, 'O');
+      currentPlayer = 'X';
+      status.textContent = `輪到你 (X)`;
+      playSound();
+    }
+
     function initializeGame() {
       board = Array(9).fill(null);
       moveHistory = { X: [], O: [] };
@@ -482,6 +824,9 @@
       boxes.forEach(box => {
         box.removeEventListener('click', handleMultiplayerMove);
         box.addEventListener('click', handleSinglePlayerMove);
+        box.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') handleSinglePlayerMove.call(box, e);
+        });
       });
     }
 
@@ -489,6 +834,9 @@
       boxes.forEach(box => {
         box.removeEventListener('click', handleSinglePlayerMove);
         box.addEventListener('click', handleMultiplayerMove);
+        box.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') handleMultiplayerMove.call(box, e);
+        });
       });
     }
 
@@ -545,7 +893,15 @@
       }
       moveHistory[player].push(index);
       if (moveHistory[player].length > 3) {
-        const oldIndex = moveHistory[player].shift();
+        let oldIndex;
+        if (gameMode === 'inferno') {
+          // 地獄模式：隨機移除一個符號
+          const randomIndex = Math.floor(Math.random() * moveHistory[player].length);
+          oldIndex = moveHistory[player].splice(randomIndex, 1)[0];
+        } else {
+          // 其他模式：移除最早的符號
+          oldIndex = moveHistory[player].shift();
+        }
         board[oldIndex] = null;
         boxes[oldIndex].textContent = '';
         boxes[oldIndex].classList.remove('active', 'random-color-1', 'random-color-2', 'random-color-3');
@@ -559,9 +915,11 @@
         setupSinglePlayer();
       } else if (gameMode === 'multi') {
         setupMultiplayer();
-      } else {
+      } else if (gameMode === 'time') {
         setupSinglePlayer();
         startTimer();
+      } else if (gameMode === 'inferno') {
+        startInfernoMode();
       }
     }
 
@@ -610,6 +968,7 @@
         winStreak = 0;
       }
       updateScoreDisplay();
+      saveGameData();
     }
 
     function updateScoreDisplay() {
@@ -627,17 +986,56 @@
       achievementsDisplay.textContent = achievementsText || '成就: 無 (開始遊戲解鎖吧！)';
     }
 
+    function showAchievementPopup(achievementName) {
+      achievementPopup.textContent = `成就解鎖：${achievementName}`;
+      achievementPopup.classList.add('show');
+      setTimeout(() => {
+        achievementPopup.classList.remove('show');
+      }, 2000);
+    }
+
     function checkAchievements() {
+      let newUnlock = false;
       if (!achievements.firstWin.unlocked && scores.player === 1) {
         achievements.firstWin.unlocked = true;
+        showAchievementPopup(achievements.firstWin.name);
+        newUnlock = true;
       }
       if (!achievements.threeWins.unlocked && achievements.threeWins.count >= 3) {
         achievements.threeWins.unlocked = true;
+        showAchievementPopup(achievements.threeWins.name);
+        newUnlock = true;
       }
       if (!achievements.timeMaster.unlocked && gameMode === 'time' && currentPlayer === 'X') {
         achievements.timeMaster.unlocked = true;
+        showAchievementPopup(achievements.timeMaster.name);
+        newUnlock = true;
       }
-      updateAchievementsDisplay();
+      if (!achievements.infernoConqueror.unlocked && gameMode === 'inferno' && currentPlayer === 'X') {
+        achievements.infernoConqueror.unlocked = true;
+        showAchievementPopup(achievements.infernoConqueror.name);
+        newUnlock = true;
+      }
+      if (newUnlock) {
+        updateAchievementsDisplay();
+        saveGameData();
+      }
+    }
+
+    function showHint() {
+      const difficulty = document.getElementById('difficulty').value;
+      if (difficulty !== 'easy' || currentPlayer !== 'X' || checkWinner()) return;
+
+      let emptyCells = board.reduce((acc, cell, idx) => (!cell ? [...acc, idx] : acc), []);
+      if (emptyCells.length === 0) return;
+
+      let hintIndex = -1;
+      hintIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+
+      boxes[hintIndex].style.background = currentTheme === 'cyberpunk' ? '#ff007a' : currentTheme === 'retro-pixel' ? '#f00' : currentTheme === 'futuristic' ? '#00d4ff' : '#ff5555';
+      setTimeout(() => {
+        boxes[hintIndex].style.background = currentTheme === 'cyberpunk' ? '#1a1a3d' : currentTheme === 'retro-pixel' ? '#000' : currentTheme === 'futuristic' ? 'transparent' : 'rgba(255, 255, 255, 0.8)';
+      }, 1000);
     }
 
     function handleSinglePlayerMove() {
@@ -714,7 +1112,7 @@
 
       for (let condition of winConditions) {
         if (condition.every(index => board[index] === player)) {
-          return true;
+          return { canWin: true, index: -1 };
         }
         let emptyIndex = -1;
         let count = 0;
@@ -726,7 +1124,34 @@
           return { canWin: true, index: emptyIndex };
         }
       }
-      return false;
+      return { canWin: false, index: -1 };
+    }
+
+    function checkForTrap(player) {
+      const winConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // 橫行
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // 直行
+        [0, 4, 8], [2, 4, 6]             // 對角線
+      ];
+
+      let traps = [];
+      for (let i = 0; i < board.length; i++) {
+        if (board[i]) continue;
+        let tempBoard = [...board];
+        tempBoard[i] = player;
+        let winPossibilities = 0;
+        for (let condition of winConditions) {
+          let count = 0;
+          let empty = 0;
+          for (let idx of condition) {
+            if (tempBoard[idx] === player) count++;
+            else if (!tempBoard[idx]) empty++;
+          }
+          if (count === 2 && empty === 1) winPossibilities++;
+        }
+        if (winPossibilities >= 2) traps.push(i);
+      }
+      return traps.length > 0 ? traps[0] : -1;
     }
 
     function aiMove() {
@@ -744,21 +1169,44 @@
       if (emptyCells.length === 0) return;
 
       const difficulty = document.getElementById('difficulty').value;
-
       let moveIndex = -1;
-      if (difficulty === 'hard') {
+
+      if (difficulty === 'inferno') {
+        // 地獄模式：極難 AI
+        // 1. 檢查 AI 是否能贏
         const winMove = checkForWin('O');
-        if (winMove && winMove.canWin) {
+        if (winMove.canWin && winMove.index !== -1) {
+          moveIndex = winMove.index;
+        } else {
+          // 2. 阻擋玩家的勝利
+          const blockMove = checkForWin('X');
+          if (blockMove.canWin && blockMove.index !== -1) {
+            moveIndex = blockMove.index;
+          } else {
+            // 3. 設置陷阱（創造多個勝利機會）
+            const trapMove = checkForTrap('O');
+            if (trapMove !== -1) {
+              moveIndex = trapMove;
+            } else {
+              // 4. 選擇最佳位置（中心 > 角落 > 邊）
+              const priority = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+              moveIndex = priority.find(idx => !board[idx]);
+            }
+          }
+        }
+      } else if (difficulty === 'hard') {
+        const winMove = checkForWin('O');
+        if (winMove.canWin && winMove.index !== -1) {
           moveIndex = winMove.index;
         } else {
           const blockMove = checkForWin('X');
-          if (blockMove && blockMove.canWin) {
+          if (blockMove.canWin && blockMove.index !== -1) {
             moveIndex = blockMove.index;
           }
         }
       } else if (difficulty === 'normal') {
         const blockMove = checkForWin('X');
-        if (blockMove && blockMove.canWin) {
+        if (blockMove.canWin && blockMove.index !== -1) {
           moveIndex = blockMove.index;
         }
       }
@@ -798,15 +1246,6 @@
     function disableBoard() {
       boxes.forEach(box => box.disabled = true);
       clearInterval(timerInterval);
-    }
-
-    function toggleTheme() {
-      isCyberpunkTheme = !isCyberpunkTheme;
-      if (isCyberpunkTheme) {
-        document.body.classList.add('cyberpunk');
-      } else {
-        document.body.classList.remove('cyberpunk');
-      }
     }
   </script>
 </body>
